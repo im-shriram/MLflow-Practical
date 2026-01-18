@@ -95,5 +95,9 @@ target/
 # Mypy cache
 .mypy_cache/
 
+# References
+/references/mlflow-aws error resolution.pdf
+
+# MLflow experiments folder
 /mlartifacts
 /mlruns
