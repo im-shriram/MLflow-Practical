@@ -3,7 +3,7 @@ data_ingestion:
   test_size: 0.2
 
 feature_engineering:
-  bow_max_features: 150
+  bow_max_features: 100
 
 model_training:
   estimator:
@@ -14,13 +14,13 @@ model_training:
     min_samples_leaf: 2
     estimator_max_features: 0.85
     estimator_random_state: 42
-  
+
   bagging:
-    n_estimators: 500
+    n_estimators: 100
     max_samples: 0.75
     bagging_max_features: 0.75
     bootstrap: False
-    bootstrap_features: False 
+    bootstrap_features: False
     oob_score: False
     warm_start: False
     bagging_random_state: 42

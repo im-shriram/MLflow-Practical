@@ -73,6 +73,9 @@ def load_model(model_dir: str, sample_input: pd.DataFrame) -> BaggingClassifier:
     mlflow.sklearn.log_model(model, signature=signature)
 
     # Why model signatures are needed?
+    """
+        → For maintaining consistency, let's say the output of this model is used as an input for some other model so those developers also accessing this model through an internal API. If the input they used to predict from this model does not follow the model signature it will throw an error. That's why the signature of the model is defined for maintaining consistency.
+    """
     return model
 
 # Evaluating Model
@@ -155,7 +158,7 @@ def main() -> None:
     logger.info(msg="Started model evaluation pipeline")
 
     # Setting mlflow tracking uri
-    mlflow.set_tracking_uri(uri="http://ec2-65-1-248-252.ap-south-1.compute.amazonaws.com:5000/")
+    mlflow.set_tracking_uri(uri="http://127.0.0.1:8080/")
 
     # Forming directory paths
     home_dir = pathlib.Path(__file__).parent.parent.parent
@@ -164,11 +167,8 @@ def main() -> None:
     model_dir = home_dir / "models" 
     logger.info(f"Working directory: {home_dir}")
 
-    # dvclive storing path
-    dvclive_path = home_dir / "dvclive"
-
     # Creating new experiment
-    # experiment_id = mlflow.create_experiment(name="bagging_classifier_50_bow_features") # If experiment already exists then dont create it again otherwise throw error.
+    experiment_id = mlflow.create_experiment(name="bagging_classifier_50_bow_features") # If experiment already exists then dont create it again otherwise throw error.
     experiment_id = mlflow.get_experiment_by_name(name="bagging_classifier_50_bow_features").experiment_id
 
     tags = {
