@@ -70,7 +70,7 @@ def load_model(model_dir: str, sample_input: pd.DataFrame) -> BaggingClassifier:
     logger.info(f"Logging model using MLflow from {model_path}")
     sample_output = model.predict(sample_input)
     signature = mlflow.models.infer_signature(sample_input, sample_output) # This is automatic signature. You can also define it manually by defining the datatype of every single feature in your dataframe.
-    mlflow.sklearn.log_model(model, signature=signature, name="model")
+    mlflow.sklearn.log_model(model, signature=signature, name="bagging_classifier")
 
     # Why model signatures are needed?
     """
@@ -168,8 +168,9 @@ def main() -> None:
     logger.info(f"Working directory: {home_dir}")
 
     # Creating new experiment
-    # experiment_id = mlflow.create_experiment(name="bagging_classifier_50_bow_features") # If experiment already exists then dont create it again otherwise throw error.
-    experiment_id = mlflow.get_experiment_by_name(name="bagging_classifier_50_bow_features").experiment_id
+    if mlflow.get_experiment_by_name(name="bagging_classifier_bow_features_1000") is None:
+        experiment_id = mlflow.create_experiment(name="bagging_classifier_bow_features_1000") # If experiment already exists then dont create it again otherwise throw error.
+    experiment_id = mlflow.get_experiment_by_name(name="bagging_classifier_bow_features_1000").experiment_id
 
     tags = {
         "engineering": "ML Platform",
@@ -180,7 +181,7 @@ def main() -> None:
     }   
     with mlflow.start_run(
         experiment_id=experiment_id,
-        run_name="bagging_classifier_50_bow_features_run_3",
+        run_name="bagging_classifier_bow_features_1000_run_1",
         tags=tags,
         nested=False,
         description="Model evaluation run for bagging classifier with 50 bag of words features") as run:

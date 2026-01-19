@@ -76,6 +76,9 @@ def register_model(experiment_name: str, production_model_name: str, archive_mod
         logger.info(f"Latest F1: {latest_f1}, Production F1: {prod_f1}")
         if latest_f1 >= prod_f1:
             logger.info("Latest model is better or equal. Registering...")
+            client.set_registered_model_alias(name=archive_model_name, alias="archive", version=archive_version)
+
+            logger.info("Shifting production model to archive")
             should_register = True
         else:
             logger.info("Production model is better. Skipping registration.")
@@ -85,7 +88,6 @@ def register_model(experiment_name: str, production_model_name: str, archive_mod
         try:
             mlflow.register_model(model_uri=latest_model_uri, name=production_model_name)
             client.set_registered_model_alias(name=production_model_name, alias="production", version=production_version) # NOTE: The production alias automatically transferred from v1 to v6
-            client.set_registered_model_alias(name=archive_model_name, alias="archive", version=archieve_version) # NOTE: The production alias automatically transferred from v1 to v6
             logger.info("Model registered successfully.")
         except Exception as e:
             logger.error(f"Failed to register model: {e}")
@@ -113,21 +115,21 @@ def main() -> None:
     model_path = home_dir / "models"
 
     # Need to change for every run
-    experiment_name = "bagging_classifier_50_bow_features"
+    experiment_name = "bagging_classifier_bow_features_1000"
     production_model_name = "bagging_classifier"
     archive_model_name = "bagging_classifier"
-    production_version = 11
-    archive_version = 10
+    production_version = 2
+    archive_version = 1
 
     register_model(
         experiment_name=experiment_name,
         production_model_name=production_model_name,
-        archive_model_name=archive_version,
+        archive_model_name=archive_model_name,
         data_dir=data_path,
         model_dir=model_path,
         client=client,
         production_version=production_version,
-        archieve_version=archive_version
+        archive_version=archive_version
     )
 
 if __name__ == "__main__":
