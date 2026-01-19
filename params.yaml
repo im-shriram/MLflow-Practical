@@ -1,6 +1,6 @@
 data_ingestion:
   seed: 42
-  test_size: 0.2
+  test_size: 0.20
 
 feature_engineering:
   bow_max_features: 100
@@ -16,7 +16,7 @@ model_training:
     estimator_random_state: 42
 
   bagging:
-    n_estimators: 100
+    n_estimators: 150
     max_samples: 0.75
     bagging_max_features: 0.75
     bootstrap: False

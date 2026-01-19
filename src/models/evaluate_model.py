@@ -70,7 +70,7 @@ def load_model(model_dir: str, sample_input: pd.DataFrame) -> BaggingClassifier:
     logger.info(f"Logging model using MLflow from {model_path}")
     sample_output = model.predict(sample_input)
     signature = mlflow.models.infer_signature(sample_input, sample_output) # This is automatic signature. You can also define it manually by defining the datatype of every single feature in your dataframe.
-    mlflow.sklearn.log_model(model, signature=signature)
+    mlflow.sklearn.log_model(model, signature=signature, name="model")
 
     # Why model signatures are needed?
     """
@@ -158,7 +158,7 @@ def main() -> None:
     logger.info(msg="Started model evaluation pipeline")
 
     # Setting mlflow tracking uri
-    mlflow.set_tracking_uri(uri="http://127.0.0.1:8080/")
+    mlflow.set_tracking_uri(uri="http://127.0.0.1:8080")
 
     # Forming directory paths
     home_dir = pathlib.Path(__file__).parent.parent.parent
@@ -168,7 +168,7 @@ def main() -> None:
     logger.info(f"Working directory: {home_dir}")
 
     # Creating new experiment
-    experiment_id = mlflow.create_experiment(name="bagging_classifier_50_bow_features") # If experiment already exists then dont create it again otherwise throw error.
+    # experiment_id = mlflow.create_experiment(name="bagging_classifier_50_bow_features") # If experiment already exists then dont create it again otherwise throw error.
     experiment_id = mlflow.get_experiment_by_name(name="bagging_classifier_50_bow_features").experiment_id
 
     tags = {
