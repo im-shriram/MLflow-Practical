@@ -38,7 +38,7 @@ def get_latest_run_info(experiment_name: str) -> tuple[str, str]:
         raise ValueError(f"No runs found in experiment '{experiment_name}'")
     
     run_id = runs.iloc[0].run_id
-    model_uri = f"runs:/{run_id}/model"
+    model_uri = f"runs:/{run_id}/bagging_classifier"
     return model_uri, run_id
 
 def register_model(experiment_name: str, production_model_name: str, archive_model_name: str, data_dir: pathlib.Path, model_dir: pathlib.Path, client: MlflowClient, production_version: int, archive_version: int) -> None:
@@ -118,8 +118,8 @@ def main() -> None:
     experiment_name = "bagging_classifier_bow_features_1000"
     production_model_name = "bagging_classifier"
     archive_model_name = "bagging_classifier"
-    production_version = 2
-    archive_version = 1
+    production_version = 3
+    archive_version = 2
 
     register_model(
         experiment_name=experiment_name,
